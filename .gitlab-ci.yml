@@ -310,5 +310,5 @@ after_script:
           \"text\": \"$message\",
           \"mrkdwn_in\": [\"text\"]
         }]
-      }" https://hooks.slack.com/services/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
+      }" https://slackchanel
     fi

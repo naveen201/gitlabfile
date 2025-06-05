@@ -1,0 +1,103 @@
+replicaCount: 1
+
+#images
+ABCImage:
+  repository: 129384.dkr.ecr.ap-south-1.amazonaws.com/preprod
+  tag: 33518
+  pullPolicy: Always
+
+#labels
+labels:
+  environment: preprod
+  app: preprod
+  team: DevOps
+
+#imagePullSecrets
+imagePullSecrets: []
+
+#Rollingupdate
+type: RollingUpdate
+maxSurge: 0
+maxUnavailable: 1
+minReadySeconds: 5
+revisionHistoryLimit: 10  
+
+#serviceAccount     
+serviceAccount: {} 
+
+#securityContextABC
+securityContextABC: {}
+
+ 
+#service
+service:
+  enabled: true
+  type: NodePort
+  port: 8095
+  targetPort: 8000
+  protocol: TCP
+  name: http
+
+#containerPortABC
+containerPortABC:
+  - containerPort: 8000
+
+#ingress
+ingress:
+  enabled: false
+
+
+#ABCresources
+ABCResources:
+  limits:
+    cpu: 2
+    memory: 4Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+#persistentVolumeClaim 
+persistentVolumeClaim:
+  enabled: true
+  name: datadash-pvc-preprod
+  spec:
+    storageClassName: efs-sc
+    accessModes:
+      - ReadWriteMany
+    resources:
+      requests:
+        storage: 5Gi
+
+#autoscaling
+autoscaling:
+  enabled: true
+  targetCPUUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: 75
+  minReplicas: 2
+  maxReplicas: 5
+
+#nodeSelector
+nodeSelector: {}
+
+#tolerations
+tolerations: []
+
+#affinity
+affinity: []
+
+# Liveness Probe
+livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 3
+      periodSeconds: 10
+
+# Readiness Probe
+readinessProbe:
+  httpGet:
+    path: /api # Replace with the actual path for the readiness check
+    port: http       # Replace with the actual port for the readiness check
+  initialDelaySeconds: 60
+  periodSeconds: 20

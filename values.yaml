@@ -59,7 +59,7 @@ ABCResources:
 #persistentVolumeClaim 
 persistentVolumeClaim:
   enabled: true
-  name: datadash-pvc-preprod
+  name: pvc-preprod
   spec:
     storageClassName: efs-sc
     accessModes:
